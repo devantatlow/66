@@ -1,0 +1,49 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+#map {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+#story {
+  position: relative;
+  width: 35%;
+  max-width: 500px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.9);
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.step {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-left: 4px solid #444;
+  background: white;
+  transition: background 0.3s;
+}
+
+.step.is-active {
+  background: #f0f0f0;
+}
+
+.step img {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  margin-top: 1rem;
+  border-radius: 6px;
+}
+
+.caption {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 0.5rem;
+  font-style: italic;
+}

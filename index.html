@@ -1,37 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Route 66: Health Inequality in Boston</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="style.css" rel="stylesheet">
+  <title>Route 66: Photo Scroll</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://unpkg.com/scrollama"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 </head>
 <body>
   <div id="map"></div>
-
   <div id="story">
     <div id="scrolly">
-      <div class="step" data-lat="42.3736" data-lng="-71.1097" data-zoom="14" data-img="assets/img/C-Johnston Gate.JPG" data-caption="Harvard Square: wealth, legacy, and the highest life expectancy.">
-        <h2>Cambridge (Harvard Square)</h2>
-      </div>
-      <div class="step" data-lat="42.3549" data-lng="-71.1328" data-zoom="14" data-img="assets/img/A-shopping cart.JPG" data-caption="Allston: student-heavy, rent-burdened, visibly under-resourced.">
-        <h2>Allston/Brighton</h2>
-      </div>
-      <div class="step" data-lat="42.3317" data-lng="-71.1212" data-zoom="14" data-img="assets/img/B-green street2.JPG" data-caption="Brookline: wealthy, clean, high-performing public services.">
-        <h2>Brookline</h2>
-      </div>
-      <div class="step" data-lat="42.3364" data-lng="-71.1054" data-zoom="15" data-img="assets/img/L-HMS main building.JPG" data-caption="Longwood: Harvard Medical School, world-class hospitals, limited local benefit.">
-        <h2>Longwood Medical Area</h2>
-      </div>
-      <div class="step" data-lat="42.3251" data-lng="-71.0908" data-zoom="14" data-img="assets/img/R-diabetes cash.JPG" data-caption="Roxbury: under-resourced, life expectancy nearly 20 years lower than Cambridge.">
-        <h2>Roxbury</h2>
-      </div>
+      <div id="graphic"></div>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>

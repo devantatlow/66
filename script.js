@@ -14,7 +14,7 @@ map.on('load', () => {
   });
 
   map.addLayer({
-    id: 'route66-line',
+    id: 'route-line',
     type: 'line',
     source: 'route66',
     layout: {
@@ -22,47 +22,52 @@ map.on('load', () => {
       'line-cap': 'round'
     },
     paint: {
-      'line-color': '#FF5733',
+      'line-color': '#ff5733',
       'line-width': 4
     }
   });
 });
 
-const scroller = scrollama();
+Papa.parse('data/img_coords.csv', {
+  download: true,
+  header: true,
+  complete: function(results) {
+    const container = document.getElementById('graphic');
+    results.data.forEach(row => {
+      const step = document.createElement('div');
+      step.className = 'step';
+      step.setAttribute('data-lat', row.latitude);
+      step.setAttribute('data-lng', row.longitude);
+      step.setAttribute('data-img', `assets/img/${row.filename.trim()}`);
 
-scroller
-  .setup({
-    step: '.step',
-    offset: 0.5,
-    debug: false
-  })
-  .onStepEnter(response => {
-    const el = response.element;
-    const lat = el.getAttribute('data-lat');
-    const lng = el.getAttribute('data-lng');
-    const zoom = el.getAttribute('data-zoom');
-    const imgSrc = el.getAttribute('data-img');
-    const caption = el.getAttribute('data-caption');
+      const title = document.createElement('h2');
+      title.textContent = row.filename;
+      step.appendChild(title);
 
-    map.flyTo({
-      center: [lng, lat],
-      zoom: zoom
+      container.appendChild(step);
     });
 
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('is-active'));
-    el.classList.add('is-active');
+    scrollama().setup({
+      step: '.step',
+      offset: 0.6,
+      debug: false
+    }).onStepEnter(({ element }) => {
+      const lat = +element.getAttribute('data-lat');
+      const lng = +element.getAttribute('data-lng');
+      const imgSrc = element.getAttribute('data-img');
 
-    // If image or caption not yet added, inject them
-    if (!el.querySelector('img')) {
-      const img = document.createElement('img');
-      img.src = imgSrc;
-      el.appendChild(img);
-    }
+      map.flyTo({ center: [lng, lat], zoom: 14 });
 
-    if (!el.querySelector('.caption')) {
-      const cap = document.createElement('div');
-      cap.className = 'caption';
-      cap.innerText = caption;
-      el.appendChild(cap);
-    }
-  });
+      if (!element.querySelector('img')) {
+        const img = document.createElement('img');
+        img.src = imgSrc;
+        element.appendChild(img);
+
+        const cap = document.createElement('div');
+        cap.className = 'caption';
+        cap.textContent = imgSrc.split('/').pop().replace(/\.jpg|\.JPG/, '');
+        element.appendChild(cap);
+      }
+    });
+  }
+});

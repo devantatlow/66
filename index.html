@@ -27,11 +27,39 @@
 
   <div id="control-panel">
     <button id="toggle-edit">Customize Order</button>
+    <button id="add-text-box">Add Text Box</button>
     <div id="order-editor" style="display: none;">
       <p>Drag photos to reorder:</p>
       <div id="sortable-list"></div>
       <button id="save-order">Save Order</button>
       <button id="cancel-edit">Cancel</button>
+    </div>
+  </div>
+  
+  <!-- Modal for adding text boxes -->
+  <div id="text-box-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Add New Text Box</h2>
+      <form id="text-box-form">
+        <div class="form-group">
+          <label for="text-title">Title:</label>
+          <input type="text" id="text-title" required>
+        </div>
+        <div class="form-group">
+          <label for="text-content">Content:</label>
+          <textarea id="text-content" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="text-lat">Latitude:</label>
+          <input type="number" id="text-lat" step="0.0000001" required>
+        </div>
+        <div class="form-group">
+          <label for="text-lng">Longitude:</label>
+          <input type="number" id="text-lng" step="0.0000001" required>
+        </div>
+        <button type="button" id="submit-text-box">Add Text Box</button>
+      </form>
     </div>
   </div>
 
@@ -52,10 +80,22 @@
             const item = document.createElement('div');
             item.className = 'sortable-item';
             item.setAttribute('data-index', index);
-            item.innerHTML = `
-              <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
-              <span>${photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
-            `;
+            
+            // Determine if this is a text box or image
+            const isTextBox = photoData[index].filename.includes('text_');
+            
+            if (isTextBox) {
+              item.innerHTML = `
+                <div class="text-icon">Txt</div>
+                <span>${photoData[index].title || 'Text Box'}</span>
+              `;
+            } else {
+              item.innerHTML = `
+                <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
+                <span>${photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
+              `;
+            }
+            
             sortableList.appendChild(item);
           }
         });
@@ -83,6 +123,42 @@
     document.getElementById('cancel-edit').addEventListener('click', function() {
       document.getElementById('order-editor').style.display = 'none';
     });
+    
+    // Text box modal setup
+    const modal = document.getElementById('text-box-modal');
+    const addTextBtn = document.getElementById('add-text-box');
+    const closeBtn = document.querySelector('.close');
+    const submitBtn = document.getElementById('submit-text-box');
+    
+    // Open modal
+    addTextBtn.addEventListener('click', function() {
+      modal.style.display = 'block';
+      
+      // If a point is active, use its coordinates as default
+      if (activeElement) {
+        const lat = activeElement.getAttribute('data-lat');
+        const lng = activeElement.getAttribute('data-lng');
+        if (lat && lng) {
+          document.getElementById('text-lat').value = lat;
+          document.getElementById('text-lng').value = lng;
+        }
+      }
+    });
+    
+    // Close modal
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', function(event) {
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    });
+    
+    // Submit text box
+    submitBtn.addEventListener('click', addTextBox);
   </script>
 </body>
 </html>

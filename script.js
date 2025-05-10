@@ -50,7 +50,8 @@ function loadImageData() {
     download: true,
     header: true,
     complete: function(results) {
-      photoData = results.data.filter(row => row.latitude && row.longitude); // Filter out incomplete entries
+      // Include all rows with latitude and longitude
+      photoData = results.data.filter(row => row.latitude && row.longitude);
       
       // Initialize custom order
       customOrder = [...Array(photoData.length).keys()];
@@ -85,33 +86,41 @@ function populateSteps(container, orderArray) {
         step.setAttribute('data-lng', row.longitude);
       }
       
-      // Add title - use 'title' field if available, otherwise use formatted filename
-      const title = document.createElement('h2');
-      title.textContent = row.title || row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
-      step.appendChild(title);
+      // Determine if this is a text-only entry or a photo entry
+      const isTextOnly = !row.filename || row.filename.trim() === '';
+      
+      if (!isTextOnly) {
+        step.classList.add('photo-step');
+      } else {
+        step.classList.add('text-step');
+      }
+      
+      // Add title if available
+      if (row.title && row.title.trim() !== '') {
+        const title = document.createElement('h2');
+        title.textContent = row.title;
+        step.appendChild(title);
+      } else if (!isTextOnly) {
+        // Use formatted filename as fallback for photos
+        const title = document.createElement('h2');
+        title.textContent = row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
+        step.appendChild(title);
+      }
 
-      // Add the image only if it's a photo (not a text box)
-      if (row.filename && !row.filename.includes('text_') && row.filename.match(/\.(jpe?g|png|gif)$/i)) {
+      // Add the image only for photo entries
+      if (!isTextOnly && row.filename.match(/\.(jpe?g|png|gif)$/i)) {
         const img = document.createElement('img');
         img.src = `assets/img/${row.filename.trim()}`;
         img.loading = 'lazy'; // Lazy load images for better performance
         step.appendChild(img);
       }
 
-      // Add caption - use 'caption' or 'description' field if available
-      if (row.caption || row.description) {
+      // Add caption if available
+      if (row.caption && row.caption.trim() !== '') {
         const cap = document.createElement('div');
         cap.className = 'caption';
-        cap.textContent = row.caption || row.description || '';
+        cap.textContent = row.caption;
         step.appendChild(cap);
-      }
-
-      // Add text content if available
-      if (row.text) {
-        const textContent = document.createElement('div');
-        textContent.className = 'text-content';
-        textContent.innerHTML = row.text; // Use innerHTML to support basic HTML formatting
-        step.appendChild(textContent);
       }
 
       container.appendChild(step);
@@ -153,39 +162,4 @@ function reorderPhotos(newOrder) {
     populateSteps(document.getElementById('graphic'), customOrder);
     initScrollama();
   }
-}
-
-// Add a new text box to the data
-function addTextBox() {
-  const title = document.getElementById('text-title').value;
-  const content = document.getElementById('text-content').value;
-  const lat = document.getElementById('text-lat').value;
-  const lng = document.getElementById('text-lng').value;
-  
-  if (!title || !content || !lat || !lng) {
-    alert('Please fill out all fields');
-    return;
-  }
-  
-  const textBox = {
-    filename: `text_${Date.now()}.txt`,
-    latitude: lat,
-    longitude: lng,
-    title: title,
-    caption: '',
-    text: content
-  };
-  
-  photoData.push(textBox);
-  customOrder.push(photoData.length - 1);
-  
-  // Refresh the content
-  populateSteps(document.getElementById('graphic'), customOrder);
-  initScrollama();
-  
-  // Close the modal
-  document.getElementById('text-box-modal').style.display = 'none';
-  
-  // Reset form
-  document.getElementById('text-box-form').reset();
 }

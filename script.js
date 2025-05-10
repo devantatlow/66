@@ -100,11 +100,6 @@ function populateSteps(container, orderArray) {
         const title = document.createElement('h2');
         title.textContent = row.title;
         step.appendChild(title);
-      } else if (!isTextOnly) {
-        // Use formatted filename as fallback for photos
-        const title = document.createElement('h2');
-        title.textContent = row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
-        step.appendChild(title);
       }
 
       // Add the image only for photo entries

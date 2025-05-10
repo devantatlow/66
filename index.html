@@ -2,21 +2,132 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Route 66: Photo Scroll</title>
+  <title>Route 66: Health Disparities Along Boston's Bus Route</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="style.css">
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
   <script src="https://unpkg.com/scrollama"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <!-- SortableJS for drag-and-drop reordering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body>
   <div id="map"></div>
   <div id="story">
+    <div id="intro">
+      <h1>Boston's Route 66: A Journey Through Health Disparities</h1>
+      <p>Travel from Harvard Square to Nubian Square along Boston's MBTA Route 66, where life expectancy varies by nearly 20 years between the wealthiest and poorest neighborhoods.</p>
+      <p>Scroll down to explore the route through photos and data.</p>
+    </div>
     <div id="scrolly">
       <div id="graphic"></div>
     </div>
   </div>
+
+  <div id="control-panel">
+    <button id="toggle-edit">Customize Order</button>
+    <div id="order-editor" style="display: none;">
+      <p>Drag photos to reorder:</p>
+      <div id="sortable-list"></div>
+      <button id="save-order">Save Order</button>
+      <button id="cancel-edit">Cancel</button>
+    </div>
+  </div>
+
   <script src="script.js"></script>
+  <script>
+    // Add code for the order customization interface
+    document.getElementById('toggle-edit').addEventListener('click', function() {
+      const orderEditor = document.getElementById('order-editor');
+      if (orderEditor.style.display === 'none') {
+        orderEditor.style.display = 'block';
+        
+        // Populate the sortable list with current photo order
+        const sortableList = document.getElementById('sortable-list');
+        sortableList.innerHTML = '';
+        
+        customOrder.forEach((index, position) => {
+          if (photoData[index]) {
+            const item = document.createElement('div');
+            item.className = 'sortable-item';
+            item.setAttribute('data-index', index);
+            item.innerHTML = `
+              <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
+              <span>${photoData[index].filename}</span>
+            `;
+            sortableList.appendChild(item);
+          }
+        });
+        
+        // Initialize sortable
+        new Sortable(sortableList, {
+          animation: 150,
+          ghostClass: 'sortable-ghost'
+        });
+      } else {
+        orderEditor.style.display = 'none';
+      }
+    });
+    
+    // Save the new order
+    document.getElementById('save-order').addEventListener('click', function() {
+      const items = document.querySelectorAll('.sortable-item');
+      const newOrder = Array.from(items).map(item => parseInt(item.getAttribute('data-index')));
+      
+      reorderPhotos(newOrder);
+      document.getElementById('order-editor').style.display = 'none';
+    });
+    
+    // Cancel editing
+    document.getElementById('cancel-edit').addEventListener('click', function() {
+      document.getElementById('order-editor').style.display = 'none';
+    });
+  </script>
+
+  <style>
+    #sortable-list {
+      margin-top: 10px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .sortable-item {
+      padding: 8px;
+      margin-bottom: 5px;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      cursor: move;
+      display: flex;
+      align-items: center;
+    }
+    
+    .sortable-ghost {
+      opacity: 0.5;
+      background: #c8e6ff;
+    }
+    
+    #intro {
+      padding: 1rem;
+      margin-bottom: 2rem;
+      background: rgba(255,255,255,0.95);
+      border-left: 5px solid #ff5733;
+    }
+    
+    #control-panel button {
+      background: #4287f5;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    
+    #control-panel button:hover {
+      background: #2a6ad9;
+    }
+  </style>
 </body>
 </html>

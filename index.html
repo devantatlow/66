@@ -62,9 +62,14 @@
                 <span>${photoData[index].title || 'Text Entry'}</span>
               `;
             } else {
+              // Only show title if explicitly provided
+              const displayTitle = photoData[index].title && photoData[index].title.trim() !== '' 
+                ? photoData[index].title 
+                : 'Item ' + (position + 1); // Just use a position number if no title
+              
               item.innerHTML = `
                 <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
-                <span>${photoData[index].title || photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
+                <span>${displayTitle}</span>
               `;
             }
             

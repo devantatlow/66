@@ -100,8 +100,8 @@ body {
   border-radius: 4px;
   cursor: pointer;
   margin: 5px;
-  display: block;
-  width: 100%;
+  display: inline-block;
+  min-width: 120px;
 }
 
 #control-panel button:hover {
@@ -154,65 +154,14 @@ body {
   margin-right: 10px;
 }
 
-/* Modal for text box */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7);
+/* Styling for text-only steps */
+.text-step {
+  background: rgba(51, 51, 51, 0.95);
+  border-left: 5px solid #4287f5;
 }
 
-.modal-content {
-  background-color: rgba(34, 34, 34, 0.95);
-  margin: 10% auto;
-  padding: 20px;
-  border: 1px solid #555;
-  width: 60%;
-  max-width: 500px;
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-  color: #fff;
-  text-decoration: none;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 8px;
-  background-color: #333;
-  border: 1px solid #555;
-  color: #fff;
-  border-radius: 4px;
-}
-
-.form-group textarea {
-  resize: vertical;
+.text-step.is-active {
+  background: rgba(66, 135, 245, 0.3);
 }
 
 /* For better mobile experience */

@@ -159,25 +159,58 @@ function populateSteps(container, orderArray) {
       
       const step = document.createElement('div');
       step.className = 'step';
-      step.setAttribute('data-lat', row.latitude);
-      step.setAttribute('data-lng', row.longitude);
-      step.setAttribute('data-img', `assets/img/${row.filename.trim()}`);
+      
+      // Check if this is a photo step or text-only section
+      const isPhotoStep = row.latitude && row.longitude;
+      
+      if (isPhotoStep) {
+        // This is a photo step with location data
+        step.classList.add('photo-step');
+        step.setAttribute('data-lat', row.latitude);
+        step.setAttribute('data-lng', row.longitude);
+        step.setAttribute('data-img', `assets/img/${row.filename.trim()}`);
+      } else {
+        // This is a text-only section without location data
+        step.classList.add('text-section');
+        // Use the previous step's location data if available
+        if (index > 0 && photoData[index-1].latitude && photoData[index-1].longitude) {
+          step.setAttribute('data-lat', photoData[index-1].latitude);
+          step.setAttribute('data-lng', photoData[index-1].longitude);
+        } else if (index < photoData.length-1 && photoData[index+1].latitude && photoData[index+1].longitude) {
+          // Or use the next step's location data
+          step.setAttribute('data-lat', photoData[index+1].latitude);
+          step.setAttribute('data-lng', photoData[index+1].longitude);
+        }
+      }
 
+      // Add title - use 'title' field if available, otherwise use formatted filename
       const title = document.createElement('h2');
-      title.textContent = row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " "); // Remove extension and replace underscores
+      title.textContent = row.title || row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
       step.appendChild(title);
 
-      // Add the image immediately (preload all images)
-      const img = document.createElement('img');
-      img.src = `assets/img/${row.filename.trim()}`;
-      img.loading = 'lazy'; // Lazy load images for better performance
-      step.appendChild(img);
+      // Add the image only for photo steps
+      if (isPhotoStep && !row.filename.startsWith('text_section_')) {
+        const img = document.createElement('img');
+        img.src = `assets/img/${row.filename.trim()}`;
+        img.loading = 'lazy'; // Lazy load images for better performance
+        step.appendChild(img);
+      }
 
-      // Add caption if needed
-      const cap = document.createElement('div');
-      cap.className = 'caption';
-      cap.textContent = row.description || row.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ");
-      step.appendChild(cap);
+      // Add caption - use 'caption' or 'description' field if available
+      if (row.caption || row.description) {
+        const cap = document.createElement('div');
+        cap.className = 'caption';
+        cap.textContent = row.caption || row.description || '';
+        step.appendChild(cap);
+      }
+
+      // Add text content if available
+      if (row.text) {
+        const textContent = document.createElement('div');
+        textContent.className = 'text-content';
+        textContent.innerHTML = row.text; // Use innerHTML to support basic HTML formatting
+        step.appendChild(textContent);
+      }
 
       container.appendChild(step);
     }

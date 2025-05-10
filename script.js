@@ -125,11 +125,19 @@ function populateSteps(container, orderArray) {
 }
 
 function initScrollama() {
-  scrollama().setup({
+  // Modified scrollama setup for less sensitivity
+  const scroller = scrollama();
+  
+  scroller.setup({
     step: '.step',
-    offset: 0.6,
+    offset: 0.4,       // Changed from 0.6 to 0.4 to require more scrolling before triggering
+    threshold: 1,      // Added threshold to require more of the element to be visible
+    progress: false,   // Disable progress tracking for smoother transitions
     debug: false
-  }).onStepEnter(({ element }) => {
+  }).onStepEnter(({ element, direction }) => {
+    // Prevent rapid firing of events by adding a small debounce
+    if (activeElement === element) return;
+    
     // Store the active element
     activeElement = element;
     
@@ -143,8 +151,13 @@ function initScrollama() {
     });
     element.classList.add('is-active');
 
-    // Fly to the location
-    map.flyTo({ center: [lng, lat], zoom: 14, duration: 1000 });
+    // Slow down the map transition
+    map.flyTo({ 
+      center: [lng, lat], 
+      zoom: 14, 
+      duration: 2000,  // Increased from 1000ms to 2000ms for slower transitions
+      essential: true  // Makes the animation smoother
+    });
     
     // Show the point marker
     marker.setLngLat({lng, lat}).addTo(map);

@@ -28,9 +28,8 @@
   <div id="control-panel">
     <button id="toggle-edit">Customize Order</button>
     <div id="order-editor" style="display: none;">
-      <p>Drag items to reorder:</p>
+      <p>Drag photos to reorder:</p>
       <div id="sortable-list"></div>
-      <button id="add-census">Add Census Tract</button>
       <button id="save-order">Save Order</button>
       <button id="cancel-edit">Cancel</button>
     </div>
@@ -44,37 +43,18 @@
       if (orderEditor.style.display === 'none') {
         orderEditor.style.display = 'block';
         
-        // Populate the sortable list with current photo and census tract order
+        // Populate the sortable list with current photo order
         const sortableList = document.getElementById('sortable-list');
         sortableList.innerHTML = '';
         
         customOrder.forEach((index, position) => {
-          if (index < 0) {
-            // Census tract item
-            const censusIndex = Math.abs(index) - 1;
-            if (censusData[censusIndex]) {
-              const tract = censusData[censusIndex];
-              const item = document.createElement('div');
-              item.className = 'sortable-item census-item';
-              item.setAttribute('data-index', index);
-              item.innerHTML = `
-                <span style="margin-right: 10px;">📊</span>
-                <span>${tract.title || `Census Tract ${tract.tract_id}`}</span>
-                <button class="edit-item" style="margin-left: auto; background: none; border: none; color: white; cursor: pointer;">✏️</button>
-                <button class="delete-item" style="margin-left: 5px; background: none; border: none; color: white; cursor: pointer;">🗑️</button>
-              `;
-              sortableList.appendChild(item);
-            }
-          } else if (photoData[index]) {
-            // Photo item
+          if (photoData[index]) {
             const item = document.createElement('div');
             item.className = 'sortable-item';
             item.setAttribute('data-index', index);
             item.innerHTML = `
               <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
-              <span>${photoData[index].title || photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
-              <button class="edit-item" style="margin-left: auto; background: none; border: none; color: white; cursor: pointer;">✏️</button>
-              <button class="delete-item" style="margin-left: 5px; background: none; border: none; color: white; cursor: pointer;">🗑️</button>
+              <span>${photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
             `;
             sortableList.appendChild(item);
           }
@@ -85,197 +65,10 @@
           animation: 150,
           ghostClass: 'sortable-ghost'
         });
-        
-        // Add event listeners for edit and delete buttons
-        sortableList.querySelectorAll('.edit-item').forEach(button => {
-          button.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const item = this.closest('.sortable-item');
-            const index = parseInt(item.getAttribute('data-index'));
-            editItem(index, item);
-          });
-        });
-        
-        sortableList.querySelectorAll('.delete-item').forEach(button => {
-          button.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const item = this.closest('.sortable-item');
-            sortableList.removeChild(item);
-          });
-        });
       } else {
         orderEditor.style.display = 'none';
       }
     });
-    
-    // Add Census Tract button
-    document.getElementById('add-census').addEventListener('click', function() {
-      if (censusData.length === 0) {
-        alert('No census tract data available. Please make sure census_data.csv is loaded.');
-        return;
-      }
-      
-      // Create a selection dialog
-      const dialog = document.createElement('div');
-      dialog.style.position = 'fixed';
-      dialog.style.top = '50%';
-      dialog.style.left = '50%';
-      dialog.style.transform = 'translate(-50%, -50%)';
-      dialog.style.background = 'rgba(34, 34, 34, 0.95)';
-      dialog.style.padding = '20px';
-      dialog.style.borderRadius = '8px';
-      dialog.style.zIndex = '1000';
-      dialog.style.maxHeight = '80vh';
-      dialog.style.overflow = 'auto';
-      dialog.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
-      dialog.style.minWidth = '300px';
-      
-      // Add census tract selection options
-      dialog.innerHTML = `
-        <h3 style="color: #ff9800; margin-top: 0;">Add Census Tract</h3>
-        <div style="margin-bottom: 15px;">
-          <label for="tract-select" style="display: block; margin-bottom: 5px;">Select Census Tract:</label>
-          <select id="tract-select" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #555;">
-            ${censusData.map((tract, index) => `
-              <option value="${index}">${tract.title || `Census Tract ${tract.tract_id}`}</option>
-            `).join('')}
-          </select>
-        </div>
-        <div style="display: flex; justify-content: flex-end;">
-          <button id="cancel-add" style="background: #666; color: white; border: none; padding: 8px 12px; margin-right: 10px; cursor: pointer; border-radius: 4px;">Cancel</button>
-          <button id="confirm-add" style="background: #4287f5; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px;">Add</button>
-        </div>
-      `;
-      
-      document.body.appendChild(dialog);
-      
-      // Add event listeners
-      document.getElementById('cancel-add').addEventListener('click', function() {
-        document.body.removeChild(dialog);
-      });
-      
-      document.getElementById('confirm-add').addEventListener('click', function() {
-        const select = document.getElementById('tract-select');
-        const tractIndex = parseInt(select.value);
-        
-        // Add to sortable list
-        const sortableList = document.getElementById('sortable-list');
-        const item = document.createElement('div');
-        item.className = 'sortable-item census-item';
-        item.setAttribute('data-index', -tractIndex - 1); // Negative indices for census tracts
-        
-        const tract = censusData[tractIndex];
-        item.innerHTML = `
-          <span style="margin-right: 10px;">📊</span>
-          <span>${tract.title || `Census Tract ${tract.tract_id}`}</span>
-          <button class="edit-item" style="margin-left: auto; background: none; border: none; color: white; cursor: pointer;">✏️</button>
-          <button class="delete-item" style="margin-left: 5px; background: none; border: none; color: white; cursor: pointer;">🗑️</button>
-        `;
-        
-        sortableList.appendChild(item);
-        
-        // Add event listeners for the new buttons
-        item.querySelector('.edit-item').addEventListener('click', function(e) {
-          e.stopPropagation();
-          const index = parseInt(item.getAttribute('data-index'));
-          editItem(index, item);
-        });
-        
-        item.querySelector('.delete-item').addEventListener('click', function(e) {
-          e.stopPropagation();
-          sortableList.removeChild(item);
-        });
-        
-        document.body.removeChild(dialog);
-      });
-    });
-    
-    // Edit Item Function
-    function editItem(index, listItem) {
-      let item;
-      let isPhoto = index >= 0;
-      
-      if (isPhoto) {
-        item = photoData[index];
-      } else {
-        item = censusData[Math.abs(index) - 1];
-      }
-      
-      if (!item) return;
-      
-      // Create edit dialog
-      const dialog = document.createElement('div');
-      dialog.style.position = 'fixed';
-      dialog.style.top = '50%';
-      dialog.style.left = '50%';
-      dialog.style.transform = 'translate(-50%, -50%)';
-      dialog.style.background = 'rgba(34, 34, 34, 0.95)';
-      dialog.style.padding = '20px';
-      dialog.style.borderRadius = '8px';
-      dialog.style.zIndex = '1000';
-      dialog.style.maxHeight = '80vh';
-      dialog.style.overflow = 'auto';
-      dialog.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.5)';
-      dialog.style.minWidth = '300px';
-      
-      // Create form content based on item type
-      const formContent = isPhoto ? `
-        <h3 style="color: #4287f5; margin-top: 0;">Edit Photo</h3>
-        <div style="margin-bottom: 15px;">
-          <label for="title-input" style="display: block; margin-bottom: 5px;">Title:</label>
-          <input id="title-input" value="${item.title || item.filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #555;">
-        </div>
-        <div style="margin-bottom: 15px;">
-          <label for="caption-input" style="display: block; margin-bottom: 5px;">Caption:</label>
-          <textarea id="caption-input" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #555; height: 80px;">${item.caption || item.description || ''}</textarea>
-        </div>
-      ` : `
-        <h3 style="color: #ff9800; margin-top: 0;">Edit Census Tract</h3>
-        <div style="margin-bottom: 15px;">
-          <label for="title-input" style="display: block; margin-bottom: 5px;">Title:</label>
-          <input id="title-input" value="${item.title || `Census Tract ${item.tract_id}`}" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #555;">
-        </div>
-        <div style="margin-bottom: 15px;">
-          <label for="description-input" style="display: block; margin-bottom: 5px;">Description:</label>
-          <textarea id="description-input" style="width: 100%; padding: 8px; background: #333; color: white; border: 1px solid #555; height: 80px;">${item.description || ''}</textarea>
-        </div>
-      `;
-      
-      dialog.innerHTML = `
-        ${formContent}
-        <div style="display: flex; justify-content: flex-end;">
-          <button id="cancel-edit-form" style="background: #666; color: white; border: none; padding: 8px 12px; margin-right: 10px; cursor: pointer; border-radius: 4px;">Cancel</button>
-          <button id="save-edit-form" style="background: #4287f5; color: white; border: none; padding: 8px 12px; cursor: pointer; border-radius: 4px;">Save</button>
-        </div>
-      `;
-      
-      document.body.appendChild(dialog);
-      
-      // Add event listeners
-      document.getElementById('cancel-edit-form').addEventListener('click', function() {
-        document.body.removeChild(dialog);
-      });
-      
-      document.getElementById('save-edit-form').addEventListener('click', function() {
-        if (isPhoto) {
-          // Update photo data
-          item.title = document.getElementById('title-input').value;
-          item.caption = document.getElementById('caption-input').value;
-          
-          // Update the list item text
-          listItem.querySelector('span:nth-child(2)').textContent = item.title;
-        } else {
-          // Update census tract data
-          item.title = document.getElementById('title-input').value;
-          item.description = document.getElementById('description-input').value;
-          
-          // Update the list item text
-          listItem.querySelector('span:nth-child(2)').textContent = item.title;
-        }
-        
-        document.body.removeChild(dialog);
-      });
-    }
     
     // Save the new order
     document.getElementById('save-order').addEventListener('click', function() {
@@ -290,3 +83,6 @@
     document.getElementById('cancel-edit').addEventListener('click', function() {
       document.getElementById('order-editor').style.display = 'none';
     });
+  </script>
+</body>
+</html>

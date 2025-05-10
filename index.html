@@ -54,7 +54,7 @@
             item.setAttribute('data-index', index);
             item.innerHTML = `
               <img src="assets/img/${photoData[index].filename.trim()}" width="50" height="50" style="object-fit: cover; margin-right: 10px;">
-              <span>${photoData[index].filename}</span>
+              <span>${photoData[index].filename.replace(/\.[^/.]+$/, "").replace(/_/g, " ")}</span>
             `;
             sortableList.appendChild(item);
           }
@@ -84,50 +84,5 @@
       document.getElementById('order-editor').style.display = 'none';
     });
   </script>
-
-  <style>
-    #sortable-list {
-      margin-top: 10px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    
-    .sortable-item {
-      padding: 8px;
-      margin-bottom: 5px;
-      background: #f8f8f8;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      cursor: move;
-      display: flex;
-      align-items: center;
-    }
-    
-    .sortable-ghost {
-      opacity: 0.5;
-      background: #c8e6ff;
-    }
-    
-    #intro {
-      padding: 1rem;
-      margin-bottom: 2rem;
-      background: rgba(255,255,255,0.95);
-      border-left: 5px solid #ff5733;
-    }
-    
-    #control-panel button {
-      background: #4287f5;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin: 5px;
-    }
-    
-    #control-panel button:hover {
-      background: #2a6ad9;
-    }
-  </style>
 </body>
 </html>

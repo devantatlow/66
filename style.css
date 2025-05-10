@@ -74,45 +74,6 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Census tract data styling */
-.census-step {
-  border-left: 5px solid #ff9800;
-}
-
-.census-step.is-active {
-  background: rgba(255, 152, 0, 0.2);
-  border-left: 5px solid #ff9800;
-}
-
-.census-step h2 {
-  color: #ff9800;
-}
-
-.census-content {
-  display: flex;
-  justify-content: space-around;
-  margin: 1.5rem 0;
-}
-
-.data-point {
-  text-align: center;
-  padding: 0.5rem;
-}
-
-.data-value {
-  font-size: 2rem;
-  font-weight: bold;
-  color: #fff;
-  margin-bottom: 0.5rem;
-}
-
-.data-label {
-  font-size: 0.8rem;
-  color: #bbb;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
 /* Custom line indicator for active step */
 .step.is-active::after {
   content: '';
@@ -122,10 +83,6 @@ body {
   width: 20px;
   height: 2px;
   background: #4287f5;
-}
-
-.census-step.is-active::after {
-  background: #ff9800;
 }
 
 /* Control panel styling */
@@ -155,11 +112,6 @@ body {
   background: #2a6ad9;
 }
 
-#order-editor {
-  width: 300px;
-  max-width: 80vw;
-}
-
 #sortable-list {
   margin-top: 10px;
   max-height: 300px;
@@ -175,10 +127,6 @@ body {
   cursor: move;
   display: flex;
   align-items: center;
-}
-
-.sortable-item.census-item {
-  border-left: 4px solid #ff9800;
 }
 
 .sortable-ghost {
@@ -206,13 +154,5 @@ body {
   
   .step img {
     max-height: 200px;
-  }
-  
-  .census-content {
-    flex-direction: column;
-  }
-  
-  .data-point {
-    margin-bottom: 1rem;
   }
 }

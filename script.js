@@ -95,12 +95,13 @@ function populateSteps(container, orderArray) {
         step.classList.add('text-step');
       }
       
-      // Add title if available
+      // Add title only if explicitly available and not empty
       if (row.title && row.title.trim() !== '') {
         const title = document.createElement('h2');
         title.textContent = row.title;
         step.appendChild(title);
       }
+      // No else clause - if no title is specified, don't show any title
 
       // Add the image only for photo entries
       if (!isTextOnly && row.filename.match(/\.(jpe?g|png|gif)$/i)) {

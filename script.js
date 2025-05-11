@@ -12,10 +12,8 @@ const pointMarker = document.createElement('div');
 pointMarker.className = 'point-marker';
 const marker = new mapboxgl.Marker(pointMarker);
 
-// Store the original photo order from CSV
+// Store the photo data
 let photoData = [];
-// Store the customized order (can be modified)
-let customOrder = [];
 // Store active photo element
 let activeElement = null;
 
@@ -53,13 +51,10 @@ function loadImageData() {
       // Include all rows with latitude and longitude
       photoData = results.data.filter(row => row.latitude && row.longitude);
       
-      // Initialize custom order
-      customOrder = [...Array(photoData.length).keys()];
-      
       const container = document.getElementById('graphic');
       
-      // Populate the steps based on custom order
-      populateSteps(container, customOrder);
+      // Populate steps directly from CSV order
+      populateSteps(container, photoData);
 
       // Initialize scrollama after adding steps
       initScrollama();
@@ -67,16 +62,14 @@ function loadImageData() {
   });
 }
 
-// Function to populate steps based on custom order
-function populateSteps(container, orderArray) {
+// Function to populate steps based on data
+function populateSteps(container, data) {
   // Clear existing steps
   container.innerHTML = '';
   
-  // Add steps in the specified order
-  orderArray.forEach(index => {
-    if (photoData[index]) {
-      const row = photoData[index];
-      
+  // Add steps in the order they appear in the CSV
+  data.forEach(row => {
+    if (row) {
       const step = document.createElement('div');
       step.className = 'step';
       
@@ -202,13 +195,4 @@ function initScrollama() {
     // Show the point marker
     marker.setLngLat({lng, lat}).addTo(map);
   });
-}
-
-// Function to reorder photos (can be called from the console or UI)
-function reorderPhotos(newOrder) {
-  if (Array.isArray(newOrder) && newOrder.length === customOrder.length) {
-    customOrder = newOrder;
-    populateSteps(document.getElementById('graphic'), customOrder);
-    initScrollama();
-  }
 }

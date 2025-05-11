@@ -131,7 +131,7 @@ function initScrollama() {
   scroller.setup({
     step: '.step',
     offset: 0.2,       // Changed from 0.6 to 0.4 to require more scrolling before triggering
-    threshold: 1,      // Added threshold to require more of the element to be visible
+    threshold: 0.5,      // Added threshold to require more of the element to be visible
     progress: true,   // Disable progress tracking for smoother transitions
     debug: false
   }).onStepEnter(({ element, direction }) => {

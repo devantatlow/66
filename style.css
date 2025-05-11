@@ -18,7 +18,7 @@ body {
   width: 35%;
   max-width: 500px;
   background: rgba(34, 34, 34, 0.85);
-  padding: 1.5rem;
+  padding: 1rem;
   height: 100vh;
   overflow-y: scroll;
   position: relative;

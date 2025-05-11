@@ -104,13 +104,20 @@ function populateSteps(container, data) {
         step.appendChild(img);
       }
 
-      // Add caption if available
+      // Add caption if available with superscript formatting for citation references
       if (row.caption && row.caption.trim() !== '') {
         const cap = document.createElement('div');
         cap.className = 'caption';
-        cap.textContent = row.caption;
+        
+        // Format text with citation numbers as superscripts
+        // Look for patterns like [1], [2], etc. and replace with superscript tags
+        const formattedText = row.caption.replace(/\[(\d+)\]/g, '<sup>[$1]</sup>');
+        
+        // Use innerHTML instead of textContent to interpret the HTML tags
+        cap.innerHTML = formattedText;
+  
         step.appendChild(cap);
-      }
+      }  
 
       container.appendChild(step);
     }

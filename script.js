@@ -3,7 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZGV2YW50YXRsb3ciLCJhIjoiY21haDJ0YmgzMDdhczJxc
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/mapbox/dark-v11',
-  center: [-71.12, 42.35],
+  center: [-71.12, 42.35], // Adjusted center to show the entire route
   zoom: 12
 });
 
@@ -125,6 +125,46 @@ function populateSteps(container, orderArray) {
 }
 
 function initScrollama() {
+  // Common function for zoom out behavior
+  function zoomOutToFullRoute() {
+    map.flyTo({ 
+      center: [-71.12, 42.335], 
+      zoom: 12, 
+      duration: 2000,
+      essential: true
+    });
+    
+    // Remove the point marker from the map
+    marker.remove();
+    
+    // Remove active class from all steps
+    document.querySelectorAll('.step').forEach(el => {
+      el.classList.remove('is-active');
+    });
+  }
+
+  // Add observer for the intro section
+  const introObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        zoomOutToFullRoute();
+      }
+    });
+  }, { threshold: 0.5 });
+  
+  // Add observer for the references section
+  const referencesObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        zoomOutToFullRoute();
+      }
+    });
+  }, { threshold: 0.3 });
+  
+  // Observe both sections
+  introObserver.observe(document.getElementById('intro'));
+  referencesObserver.observe(document.getElementById('references'));
+  
   // Modified scrollama setup for less sensitivity
   const scroller = scrollama();
   

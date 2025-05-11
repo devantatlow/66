@@ -65,7 +65,7 @@ The map visualization follows the bus route with a scrollytelling interface that
 
 3. Run a local server:
    ```bash
-   # Using Python (one option)
+   # Either using Python 
    python -m http.server
    
    # Or using Node.js

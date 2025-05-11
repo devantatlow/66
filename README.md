@@ -36,7 +36,7 @@ The map visualization follows the bus route with a scrollytelling interface that
 - **Photography**: Original photography documenting the built environment along the route
 - **Census Data**: Demographic and socioeconomic data from Census Reporter
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 ├── index.html              # Main HTML document
@@ -50,7 +50,7 @@ The map visualization follows the bus route with a scrollytelling interface that
 └── README.md               # This documentation
 ```
 
-## 🚀 Setup and Usage
+## Setup and Usage
 
 1. Clone the repository:
    ```bash

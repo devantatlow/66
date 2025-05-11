@@ -82,7 +82,7 @@ The map visualization follows the bus route with a scrollytelling interface that
 
 ## License
 
-This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 license. This generally means you can share and adapt this project free of charge, so long as you provide attribution to the original creator and copyright holder (Devan Tatlow), freely license any adaptation with the same license, and do not use it for commercial purposes. You can see the full license documentation [here](https://creativecommons.org/licenses/by-nc-sa/4.0/)).
+This project is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 license. This generally means you can share and adapt this project free of charge, so long as you provide attribution to the original creator and copyright holder (Devan Tatlow), freely license any adaptation with the same license, and do not use it for commercial purposes. You can see the full license documentation [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ## Acknowledgments
 

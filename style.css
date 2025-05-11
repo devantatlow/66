@@ -1,185 +1,115 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
-  color: #fff;
-}
-
+/* Base styles for map and scrolling container */
 #map {
-  position: fixed;
+  position: sticky;
   top: 0;
-  bottom: 0;
-  width: 100%;
-  z-index: -1;
-}
-
-#story {
-  width: 35%;
-  max-width: 500px;
-  background: rgba(34, 34, 34, 0.85);
-  padding: 2rem;
   height: 100vh;
-  overflow-y: scroll;
-  position: relative;
   z-index: 1;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#intro {
-  padding: 1rem;
-  margin-bottom: 2rem;
-  background: rgba(51, 51, 51, 0.9);
-  border-left: 5px solid #ff5733;
-  color: #fff;
-}
-
-#intro h1 {
-  margin-top: 0;
-  color: #ff5733;
-}
-
-.step {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  background: rgba(51, 51, 51, 0.9);
-  border-left: 5px solid #444;
-  transition: background 0.3s ease;
+#graphic {
   position: relative;
-  font-size: 18px; /* Increased base font size */
+  z-index: 2;
+  padding: 0;
+  line-height: 1.6;
 }
 
-.step.is-active {
-  background: rgba(66, 135, 245, 0.2);
-  border-left: 5px solid #4287f5;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+/* Make images responsive by default */
+.responsive-img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Default desktop styles for steps */
+.step {
+  margin-bottom: 50vh;
+  padding: 25vh 2rem;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  border-radius: 5px;
+  line-height: 1.6;
+}
+
+/* Typography styles for better readability */
+.step p {
+  line-height: 1.8;
+  margin-bottom: 1.2em;
 }
 
 .step h2 {
-  margin-top: 0;
-  color: #4287f5;
-  text-transform: capitalize;
-}
-
-.step img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  max-height: none;
+  line-height: 1.4;
+  margin-bottom: 1em;
 }
 
 .caption {
-  font-size: 0.95rem; /* Increased from 0.85rem */
-  color: #bbb;
-  font-style: normal; /* Changed from italic to normal */
-  margin-top: 0.5rem;
+  line-height: 1.6;
+  margin-top: 1em;
 }
 
-.text-content {
-  margin-top: 1rem;
-  line-height: 1.6; /* Slightly increased line height for better readability */
-  font-size: 16px; /* Explicitly set font size */
+/* Active step styling */
+.step.is-active {
+  background: rgba(0, 0, 0, 0.85);
+  border-left: 5px solid #ff5733;
 }
 
-/* Control panel styling */
-#control-panel {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: rgba(34, 34, 34, 0.85);
-  border-radius: 4px;
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 10;
-  color: #fff;
+/* Specific styles for photo vs text steps */
+.photo-step {
+  max-width: 500px;
 }
 
-#control-panel button {
-  background: #4287f5;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 5px;
-  display: inline-block;
-  min-width: 120px;
-}
-
-#control-panel button:hover {
-  background: #2a6ad9;
-}
-
-#sortable-list {
-  margin-top: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.sortable-item {
-  padding: 8px;
-  margin-bottom: 5px;
-  background: rgba(51, 51, 51, 0.9);
-  border: 1px solid #444;
-  border-radius: 4px;
-  cursor: move;
-  display: flex;
-  align-items: center;
-}
-
-.sortable-ghost {
-  opacity: 0.5;
-  background: #4287f5;
-}
-
-/* Point marker style */
-.point-marker {
-  width: 12px;
-  height: 12px;
-  background-color: #4287f5;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-}
-
-/* Text box icon in sortable list */
-.text-icon {
-  width: 50px;
-  height: 50px;
-  background-color: #4287f5;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  border-radius: 4px;
-  margin-right: 10px;
-}
-
-/* Styling for text-only steps */
 .text-step {
-  background: rgba(51, 51, 51, 0.95);
-  border-left: 5px solid #4287f5;
+  max-width: 30rem;
 }
 
-.text-step.is-active {
-  background: rgba(66, 135, 245, 0.3);
-}
-
-/* For better mobile experience */
+/* Mobile-specific styles - will be applied by JS but good to have in CSS too */
 @media (max-width: 768px) {
-  #story {
-    width: 80%;
-    max-width: none;
+  #map {
+    height: 40vh !important;
+  }
+  
+  #graphic {
+    height: 60vh !important;
+    overflow-y: auto;
+    line-height: 1.5;
+  }
+  
+  .step {
+    margin-bottom: 1rem;
     padding: 1rem;
+    max-width: 100%;
+    line-height: 1.5;
   }
   
-  .step img {
-    max-height: 200px;
+  .photo-step, .text-step {
+    max-width: 100%;
   }
   
-  .modal-content {
-    width: 90%;
-    margin: 20% auto;
+  h2 {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
   }
+  
+  .step p {
+    line-height: 1.6;
+    margin-bottom: 1em;
+  }
+  
+  .caption {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-top: 0.8em;
+  }
+}
+
+/* Custom styling for the point marker */
+.point-marker {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #ff5733;
+  border: 2px solid white;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }

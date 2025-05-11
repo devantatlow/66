@@ -24,7 +24,7 @@ body {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#intro {
+#intro, #references {
   padding: 1rem;
   margin-bottom: 2rem;
   background: rgba(51, 51, 51, 0.9);
@@ -32,9 +32,13 @@ body {
   color: #fff;
 }
 
-#intro h1 {
+#intro h1, #references h2 {
   margin-top: 0;
   color: #ff5733;
+}
+
+#references {
+  margin-top: 4rem;
 }
 
 .step {
@@ -130,6 +134,14 @@ body {
 .sortable-ghost {
   opacity: 0.5;
   background: #4287f5;
+}
+
+.order-note {
+  padding: 8px;
+  margin-bottom: 10px;
+  background: rgba(255, 87, 51, 0.2);
+  border-left: 3px solid #ff5733;
+  font-size: 0.9rem;
 }
 
 /* Point marker style */

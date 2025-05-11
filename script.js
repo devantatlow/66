@@ -63,6 +63,7 @@ function loadImageData() {
 }
 
 // Function to populate steps based on data
+// Function to populate steps based on data
 function populateSteps(container, data) {
   // Clear existing steps
   container.innerHTML = '';
@@ -115,9 +116,9 @@ function populateSteps(container, data) {
         
         // Use innerHTML instead of textContent to interpret the HTML tags
         cap.innerHTML = formattedText;
-  
+        
         step.appendChild(cap);
-      }  
+      }
 
       container.appendChild(step);
     }

@@ -79,11 +79,11 @@ body {
   padding: 1.2rem;
   color: #bbb;
   font-style: normal; /* Changed from italic to normal */
-  margin-top: 0.5rem;
+  margin-top: 0.2rem;
 }
 
 .text-content {
-  margin-top: 1rem;
+  margin-top: 0.8rem;
   line-height: 1.6; /* Slightly increased line height for better readability */
   font-size: 16px; /* Explicitly set font size */
 }
